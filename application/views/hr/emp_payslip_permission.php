@@ -1,4 +1,14 @@
 <style>
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
 .switch-input[disabled] + .switch-label {
     pointer-events: none;
     background-color: #f2f2f2; 
@@ -648,7 +658,7 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <input type="number" id="cheque_no" name="cheque_no"  value="<?php echo $time_sheet_data[0]['cheque_no']; ?>"  class="form-control" requried /><br />
+                                    <input type="number" id="cheque_no" name="cheque_no"  value="<?php echo $time_sheet_data[0]['cheque_no']; ?>"  class="form-control" requried oninput="exitnumbers(this, 6)"/><br />
                                 </div>
 
                                 <div class="col-sm-6">
@@ -656,7 +666,7 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <input type="text" id="datepicker_cheque" name="cheque_date" value="<?php echo $time_sheet_data[0]['cheque_date']; ?>"  class="form-control"  requried/><br />
+                                    <input type="text" id="datepicker_cheque" name="cheque_date" value="<?php echo $time_sheet_data[0]['cheque_date']; ?>"  class="form-control" readonly requried/><br />
                                 </div>
                             </div>
                         </div>
@@ -703,7 +713,7 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
                                     <label for="aadhar">Date<i class="text-danger">*</i></label>
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="text" id="datepicker" name="cash_date" value="<?=$time_sheet_data[0]['cheque_date'];?>"  class="form-control" requried /><br />
+                                    <input type="text" id="datepicker" name="cash_date" value="<?=$time_sheet_data[0]['cheque_date'];?>"  class="form-control" readonly requried /><br />
                                 </div>
                             </div>
                         </div>
@@ -1097,6 +1107,13 @@ function showToast() {
 
 function hideToast() {
     toastr.clear();
+}
+
+function exitnumbers(input, maxLength) {
+    input.value = input.value.replace(/\D/g, '');
+    if (input.value.length > maxLength) {
+        input.value = input.value.slice(0, maxLength);
+    }
 }
 
 

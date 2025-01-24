@@ -42,8 +42,8 @@
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
       <title>940 Form</title>
    </head>
-   <body bgcolor="#A0A0A0" vlink="blue" link="blue"
-         <div id="download"  >
+   <body bgcolor="#A0A0A0" vlink="blue" link="blue">
+         <div id="download">
             <div class="container-fluid"  id="one">
                <div class="row">
                   <img src="<?php echo base_url()  ?>assets/images/f940_01.jpg" width="100%" />
@@ -187,7 +187,7 @@
                      <input type="checkbox">
                   </div>          
                   <?php
-                     $total_grosspay = $get_paytotal[0]['total_grosspay'];
+                     $total_grosspay = $lessthanAmount[0]['totalAmount'];
                      $parts = explode('.', number_format($total_grosspay, 2, '.', ''));
                      $integerPart = $parts[0];
                      $dollar_value=$integerPart;
@@ -994,7 +994,7 @@ input {
 
 <script>
 $(document).ready(function() {
-   downloadPagesAsPDF();
+   // downloadPagesAsPDF();
 });
 
 async function downloadPagesAsPDF() {

@@ -903,7 +903,9 @@ class Chrm extends CI_Controller {
 
         $data['sumQuaterWiseUnemployment'] = $this->Hrm_model->sumQuaterwiseunemploymentamount($id);
 
-        // print_r($data['sumQuaterWiseUnemployment']['Q4']); die;
+        $data['lessthanAmount'] = $this->Hrm_model->f940_lessthanAmount($id);
+
+        // print_r($data['lessthanAmount']); die;
 
         $data['amountGreaterThan'] = $this->Hrm_model->f940_excess_emp($id);
 
@@ -2074,6 +2076,7 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
         $row    = $q->row_array();
         $old_id = isset($row['timesheet_id']) ? trim($row['timesheet_id']) : null;
         if (!empty($old_id)) {
+            echo "if"; die;
             $this->session->set_userdata("timesheet_id_old", $row['timesheet_id']);
             $this->db->where('timesheet_id', $this->session->userdata("timesheet_id_old"));
             $this->db->delete('timesheet_info');
@@ -2092,7 +2095,8 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
             ->where('templ_name', $this->input->post('templ_name'))
             ->where('month', $this->input->post('date_range'))
             ->get()->row()->timesheet_id;
-        $this->session->set_userdata("timesheet_id_new", $purchase_id_2);
+
+        // $this->session->set_userdata("timesheet_id_new", $purchase_id_2);
         $date1          = $this->input->post('date');
         $day1           = $this->input->post('day');
         $time_start1    = $this->input->post('start');
@@ -2126,6 +2130,7 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
         $this->session->set_flashdata('message', display('save_successfully'));
         redirect(base_url('Chrm/manage_timesheet?id=' . urlencode($this->input->post('admin_company_id')) . '&admin_id=' . urlencode($this->input->post('adminId'))));
     }
+
     public function expense_list() {
         $setting_detail            = $this->Web_settings->retrieve_setting_editdata();
         $data['expen_list']        = $this->Hrm_model->expense_list();
@@ -2315,12 +2320,6 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
             $hrate           = $hrate;
             $extra_thisrate  = $data['timesheet_data'][0]['extra_amount'];
             $above_extra_sum = $data['timesheet_data'][0]['amount'];
-            // $scAmount = 0;
-            // if($employeedata[0]['choice'] == 'Yes') {
-            // $scAmount        = $salescommision['s_commision_amount'] ?? 0;
-            // }else{
-            // $scAmount        = 0;    
-            // }
             $scAmount = ($employeedata[0]['choice'] == 'Yes') ? ($salescommision['s_commision_amount'] ?? 0) : 0;
             $final           = $this->thisPeriodAmount($payroll_type, $payroll_freq, $data_timesheet['total_hours'], $hrate, $scAmount, $extra_thisrate, $above_extra_sum, $user_id, $company_id);
          
