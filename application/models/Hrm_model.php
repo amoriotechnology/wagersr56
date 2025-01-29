@@ -181,6 +181,7 @@ public function state_tax_list_employer()
         $this->db->where('templ_name', $id);
         $this->db->where('create_by', $user_id);
         $query = $this->db->get();
+        // echo $this->db->last_query(); die;
           if ($query->num_rows() > 0) {
             return $query->result_array();
          }
@@ -1477,14 +1478,14 @@ public function getAboveAmount($user_id)
     $this->db->where('create_by', $user_id);
     $this->db->group_by('templ_name');
     $query = $this->db->get();
-    
+
     if ($query->num_rows() > 0) {
         $result = $query->result_array();
-        
+
         $totalAboveAmount = 0;  
-        foreach ($result as &$row) {
+        foreach ($result as $row) { 
             if ($row['totalAmount'] > 7000) {
-                $row['adjustedTotalAmount'] = $row['totalAmount'] - 7000;  
+                $row['adjustedTotalAmount'] = $row['totalAmount'];  
             } else {
                 $row['adjustedTotalAmount'] = 0; 
             }
@@ -1502,7 +1503,6 @@ public function getAboveAmount($user_id)
 
 
 // Sum Quater Wise Unemployment - form 940
-
 public function sumQuaterwiseunemploymentamount($user_id)
 {
     $this->db->select('SUM(b.u_tax) as unemploymentAmount, a.quarter');
@@ -1532,6 +1532,22 @@ public function sumQuaterwiseunemploymentamount($user_id)
 }
 
 
+// Less than 7000
+
+public function f940_lessthanAmount($user_id)
+{
+    $this->db->select('SUM(total_amount) AS totalAmount');       
+    $this->db->from('info_payslip');
+    $this->db->where('total_amount <=', 7000);
+    $this->db->where('create_by', $user_id);
+    $query = $this->db->get();
+    // echo $this->db->last_query(); die;
+    if ($query->num_rows() > 0) {
+        return $query->result_array();
+    }
+    return false;
+}
+
 
 public function f940_excess_emp($user_id)
 {
@@ -1540,6 +1556,7 @@ public function f940_excess_emp($user_id)
     $this->db->where('total_amount >=', 7000);
     $this->db->where('create_by', $user_id);
     $query = $this->db->get();
+    // echo $this->db->last_query(); die;
     if ($query->num_rows() > 0) {
         return $query->result_array();
     }
@@ -2244,10 +2261,7 @@ public function timesheet_info_data($timesheet_id, $user_id)
     $this->db->where('timesheet_id', $timesheet_id);
     $this->db->where('create_by',$user_id);
     $query = $this->db->get();
-     if ($query->num_rows() > 0) {
-       return $query->result_array();
-     }
-    return true;
+    return $query->result_array();
 }
     public function delete_off_loan($transaction_id){
         $this->db->where('transaction_id', $transaction_id);
